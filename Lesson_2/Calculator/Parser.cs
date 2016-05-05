@@ -23,7 +23,7 @@ namespace Calculator
         /// <returns></returns>
         private static double DoSecondPriority(string statement, int index)
         {
-            // Find first priority operation
+            // Find first priority operations
             double x = DoFirstPriority(statement, ref index);
 
             // Look at current symbols
