@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Calculator
 {
@@ -77,7 +76,8 @@ namespace Calculator
         /// <param name="statement">string statement</param>
         /// <returns>result of statement</returns>
         static double PerformStatement(string statement) {
-            double result = Parser.PerformStatement(statement);
+
+            double result = Parser.Run(statement);
 
             return result;
         }

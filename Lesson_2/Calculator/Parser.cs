@@ -5,14 +5,24 @@ namespace Calculator
 {
     static class Parser
     {
+        public static double Run(string statement) {
+            double result = 0;
+            string expression = statement;
+
+            if (statement.Contains("(") && statement.Contains(")")){
+                expression = Parser.OpenBrackets(expression);
+            }
+
+            return PerformStatement(expression);
+        }
         /// <summary>
         /// Start method
         /// </summary>
         /// <param name="statemant">string format math statement</param>
         /// <returns></returns>
-        public static double PerformStatement(string statemant)
-        {
-            return DoSecondPriority(statemant, 0);
+        public static double PerformStatement(string statement)
+        {             
+            return DoSecondPriority(statement, 0);
         }
 
         /// <summary>
@@ -131,6 +141,30 @@ namespace Calculator
                     "Error");
                 return 0;
             }
+        }
+
+        private static string OpenBrackets(string statement) {
+            int openBracket=0, closeBracket=0;
+            string result = statement;
+
+            for (int index = 0; index < result.Length; index++) {
+
+                // Check for open bracket
+                if (result[index] == '(')
+                    openBracket = index;
+
+                // Check for close bracket
+                if (result[index] == ')') {
+                    closeBracket = index;
+
+                    // Replece performed braket block's statement in result statement
+                    result=result.Replace(result.Substring(openBracket , closeBracket-openBracket ), 
+                        PerformStatement(result.Substring(openBracket+1,closeBracket-openBracket)).ToString());
+                }
+
+            }
+
+            return result;
         }
     }
 }
