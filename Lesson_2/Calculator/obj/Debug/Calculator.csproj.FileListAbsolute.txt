@@ -4,3 +4,6 @@ c:\users\user\documents\visual studio 2015\Projects\Lesson_2\Calculator\bin\Debu
 c:\users\user\documents\visual studio 2015\Projects\Lesson_2\Calculator\obj\Debug\Calculator.csprojResolveAssemblyReference.cache
 c:\users\user\documents\visual studio 2015\Projects\Lesson_2\Calculator\obj\Debug\Calculator.exe
 c:\users\user\documents\visual studio 2015\Projects\Lesson_2\Calculator\obj\Debug\Calculator.pdb
+G:\Studies\MyProject\Lesson2\CalculatorWithParser\Lesson_2\Calculator\bin\Debug\Calculator.exe.config
+G:\Studies\MyProject\Lesson2\CalculatorWithParser\Lesson_2\Calculator\obj\Debug\Calculator.exe
+G:\Studies\MyProject\Lesson2\CalculatorWithParser\Lesson_2\Calculator\obj\Debug\Calculator.pdb
