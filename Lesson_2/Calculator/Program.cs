@@ -53,8 +53,9 @@ namespace Calculator
             string statement = "";
 
             // Input dialog
-            Console.WriteLine(@"For inputing you can you next symbols:
-        0-9 +  -  *  /");
+            Console.WriteLine(" For inputing you can you next symbols:\n"+
+                 "  0-9 +  -  *  /\n"+
+               "    and you can use brackets (statement)");
             Console.WriteLine();
             Console.WriteLine(new string('_', 60) + Environment.NewLine);
             Console.Write("Input here ---->>> ");
@@ -76,10 +77,33 @@ namespace Calculator
         /// <param name="statement">string statement</param>
         /// <returns>result of statement</returns>
         static double PerformStatement(string statement) {
-
             double result = Parser.Run(statement);
 
-            return result;
+            // Perform any situation
+            switch (Parser.OperationError) {
+                // None error
+                case ParserErrors.None:
+                    return result;
+
+                // Divide by zero excep
+                case ParserErrors.DivideByZero:
+                    Console.WriteLine(new string('-', 60) + Environment.NewLine);
+                    Console.WriteLine("Divide by zero exception");
+                    return 0;
+
+                // Format excep
+                case ParserErrors.StatemantCantBePerformed:
+                    Console.WriteLine(new string('-',60)+Environment.NewLine);
+                    Console.WriteLine("The statement cant be performed; Format Exception");
+                    return 0;
+
+                // Defoult
+                default:
+                    Console.WriteLine("Not initilizate situation");
+                    return 0;
+            }
+
+            
         }
 
     }
