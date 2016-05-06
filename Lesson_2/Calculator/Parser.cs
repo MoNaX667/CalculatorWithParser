@@ -1,14 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Calculator
 {
     static class Parser
     {
+        static ParserErrors operationError;
+
+        /// <summary>
+        /// Status of last operation
+        /// </summary>
+        public static ParserErrors OperationError {
+            get { return operationError; }
+        }
+
+        /// <summary>Run calculate</summary>
+        /// <param name="statement"></param>
+        /// <returns></returns>
         public static double Run(string statement) {
-            double result = 0;
             string expression = statement;
 
+            // Check for brackets if true than perform bracket's statement and replece 
+            // brackets statement from general statement and pass for general performing
             if (statement.Contains("(") && statement.Contains(")")){
                 expression = Parser.OpenBrackets(expression);
             }
@@ -90,10 +102,11 @@ namespace Calculator
                             throw new DivideByZeroException();
                         else
                             x /= y;
+
+                        operationError = ParserErrors.None;
                     }
                     catch(DivideByZeroException excep) {
-                        System.Windows.Forms.MessageBox.Show(
-                            "Попытка деления на ноль","Error");
+                        operationError = ParserErrors.DivideByZero;
                         return 0;
                     }
                 }
@@ -111,34 +124,30 @@ namespace Calculator
         /// <param name="statement">statement(char array form)</param>
         /// <param name="index">current statement position</param>
         /// <returns></returns>
-        private static double GetDouble(string statement, ref int index)
-        {
+        private static double GetDouble(string statement, ref int index){
             string operand = "";
 
             // While symbol is the number members all is good alse return num
             while (char.IsNumber(statement[index]) ||
-                char.IsSeparator(statement[index]))
-            {
+                char.IsSeparator(statement[index])){
                 // Add symbol to list for parsing
                 operand+=statement[index];
                 index++;
 
                 // if index so out from range break and return for normal index
-                if (index == statement.Length)
-                {
+                if (index == statement.Length){
                     index--;
                     break;
                 }
             }
 
             // Parsing with culture parametr
-            try
-            {
+            try{
                 return double.Parse(operand, System.Globalization.CultureInfo.InvariantCulture);
+
             }
             catch (System.FormatException excep) {
-                System.Windows.Forms.MessageBox.Show("Выражение не может быть приобразованно",
-                    "Error");
+                operationError = ParserErrors.StatemantCantBePerformed;
                 return 0;
             }
         }
