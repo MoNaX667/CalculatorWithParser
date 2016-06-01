@@ -1,9 +1,20 @@
-﻿namespace Calculator
+﻿// <copyright file="Parser.cs" company="Some Company">
+// Copyright (c) Sprocket Enterprises. All rights reserved.
+// </copyright>
+// <author>Vitalit Belyakov</author>
+
+namespace Calculator
 {
     using System;
 
+    /// <summary>
+    /// Parser of math
+    /// </summary>
     internal static class Parser
     {
+        /// <summary>
+        /// operation error
+        /// </summary>
         private static ParserErrors operationError;
 
         /// <summary>
@@ -19,7 +30,7 @@
 
         /// <summary>Run calculate</summary>
         /// <param name="statement">statement for calculating</param>
-        /// <returns>answer</returns>
+        /// <returns>Double answer</returns>
         public static double Run(string statement)
         {
             string expression = statement;
@@ -37,19 +48,19 @@
         /// <summary>
         /// Start method
         /// </summary>
-        /// <param name="statemant">string format math statement</param>
-        /// <returns>answer</returns>
+        /// <param name="statement">String format math statement</param>
+        /// <returns>Double answer</returns>
         public static double PerformStatement(string statement)
-        {             
+        {
             return DoSecondPriority(statement, 0);
         }
 
         /// <summary>
         /// Second priority operation method
         /// </summary>
-        /// <param name="statemant">string format math statement</param>
-        /// <param name="index">index of current position in statement</param>
-        /// <returns>second priority answer</returns>
+        /// <param name="statement">String format math statement</param>
+        /// <param name="index">Index of current position in statement</param>
+        /// <returns>Second priority answer</returns>
         private static double DoSecondPriority(string statement, int index)
         {
             // Find first priority operations
@@ -87,9 +98,9 @@
         /// <summary>
         /// Perform first turn operation
         /// </summary>
-        /// <param name="statemnt">statement(char array form)</param>
-        /// <param name="index">current statement position</param>
-        /// <returns>first level answer</returns>
+        /// <param name="statement">Statement(char array form)</param>
+        /// <param name="index">Current statement position</param>
+        /// <returns>First level answer</returns>
         private static double DoFirstPriority(string statement, ref int index)
         {
             // ... take operand
@@ -99,6 +110,13 @@
             while (true)
             {
                 char operation = statement[index];
+
+                if (operation == '!')
+                {
+                    x = Facttorial(x, ref index);
+                }
+
+                operation = statement[index];
 
                 // if current char is operation symbol
                 if (operation != '/' && operation != '*' && operation != '^')
@@ -146,6 +164,27 @@
         }
 
         /// <summary>
+        /// Calculate factorial
+        /// </summary>
+        /// <param name="x">Last x</param>
+        /// <param name="index">Current index</param>
+        /// <returns>Calculated answer</returns>
+        private static double Facttorial(double x, ref int index)
+        {
+            double result = 1;
+            int i = 1;
+
+            while (i <= x)
+            {
+                result *= i;
+                i++;
+            }
+
+            index++;
+            return result;
+        }
+
+        /// <summary>
         /// Method take number from statement(char array)
         /// </summary>
         /// <param name="statement">statement(char array form)</param>
@@ -183,6 +222,11 @@
             }
         }
 
+        /// <summary>
+        /// Open brackets
+        /// </summary>
+        /// <param name="statement">Current expression</param>
+        /// <returns>New expression</returns>
         private static string OpenBrackets(string statement)
         {
             int openBracket = 0, closeBracket = 0;
@@ -200,11 +244,18 @@
                 if (result[index] == ')')
                 {
                     closeBracket = index;
+                    int tempStart = openBracket + 1;
+                    int tempEnd = closeBracket;
 
                     // Replece performed braket block's statement in result statement
+                    string smallExpression = result.Substring(tempStart, tempEnd - tempStart);
+                    string smallAnswer = PerformStatement(smallExpression).ToString();
+
+                    // Replace answer with brackets and set index in zero for second validation
                     result = result.Replace(
-                        result.Substring(openBracket, closeBracket - openBracket),
-                        PerformStatement(result.Substring(openBracket + 1, closeBracket - openBracket)).ToString());
+                        result.Substring(openBracket, closeBracket - openBracket + 1),
+                        smallAnswer);
+                    index = 0;
                 }
             }
 

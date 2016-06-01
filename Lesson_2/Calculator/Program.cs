@@ -1,9 +1,20 @@
-﻿namespace Calculator
+﻿// <copyright file="Program.cs" company="Some Company">
+// Copyright (c) Sprocket Enterprises. All rights reserved.
+// </copyright>
+// <author>Vitalit Belyakov</author>
+
+namespace Calculator
 {
     using System;
 
+    /// <summary>
+    /// Program class
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// The main method
+        /// </summary>
         private static void Main()
         {
             // Console setting and start message
@@ -55,7 +66,7 @@
         /// <summary>
         /// Show session information block
         /// </summary>
-        /// <returns>Dialog</returns>
+        /// <returns>Dialog string</returns>
         private static string ShowDialog()
         {
             string statement = string.Empty;
@@ -85,8 +96,8 @@
         /// <summary>
         /// Calculate Parse class methods
         /// </summary>
-        /// <param name="statement">MathStatement</param>
-        /// <returns>MathResult</returns>
+        /// <param name="statement">string math statement</param>
+        /// <returns>Double result</returns>
         private static double PerformStatement(string statement)
         {
             double result = Parser.Run(statement);
