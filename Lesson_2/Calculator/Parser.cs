@@ -29,26 +29,41 @@ namespace Calculator
         }
 
         /// <summary>Run calculate</summary>
-        /// <param name="statement">statement for calculating</param>
+        /// <param name="statement">someStatement for calculating</param>
         /// <returns>Double answer</returns>
         public static double Run(string statement)
         {
             string expression = statement;
 
-            // Check for brackets if true than perform bracket's statement and replece 
-            // brackets statement from general statement and pass for general performing
+            // Check for brackets if true than perform bracket's someStatement and replece 
+            // brackets someStatement from general someStatement and pass for general performing
             if (statement.Contains("(") && statement.Contains(")"))
             {
                 expression = Parser.OpenBrackets(expression);
             }
 
-            return PerformStatement(expression);
+            expression = CalcAllFactorial(expression);
+
+            double result = PerformStatement(expression);
+            foreach (var value in result.ToString())
+            {
+                if (char.IsDigit(value))
+                {
+                    operationError = ParserErrors.None;
+                }
+                else
+                {
+                    operationError = ParserErrors.StatemantCantBePerformed;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Start method
         /// </summary>
-        /// <param name="statement">String format math statement</param>
+        /// <param name="statement">String format math someStatement</param>
         /// <returns>Double answer</returns>
         public static double PerformStatement(string statement)
         {
@@ -58,8 +73,8 @@ namespace Calculator
         /// <summary>
         /// Second priority operation method
         /// </summary>
-        /// <param name="statement">String format math statement</param>
-        /// <param name="index">Index of current position in statement</param>
+        /// <param name="statement">String format math someStatement</param>
+        /// <param name="index">Index of current position in someStatement</param>
         /// <returns>Second priority answer</returns>
         private static double DoSecondPriority(string statement, int index)
         {
@@ -98,11 +113,13 @@ namespace Calculator
         /// <summary>
         /// Perform first turn operation
         /// </summary>
-        /// <param name="statement">Statement(char array form)</param>
-        /// <param name="index">Current statement position</param>
+        /// <param name="someStatement">Statement(char array form)</param>
+        /// <param name="index">Current someStatement position</param>
         /// <returns>First level answer</returns>
-        private static double DoFirstPriority(string statement, ref int index)
+        private static double DoFirstPriority(string someStatement, ref int index)
         {
+            string statement = someStatement;
+
             // ... take operand
             double x = GetDouble(statement, ref index);
 
@@ -110,11 +127,6 @@ namespace Calculator
             while (true)
             {
                 char operation = statement[index];
-
-                if (operation == '!')
-                {
-                    x = Facttorial(x, ref index);
-                }
 
                 operation = statement[index];
 
@@ -164,6 +176,43 @@ namespace Calculator
         }
 
         /// <summary>
+        /// Calculate all factorials
+        /// </summary>
+        /// <param name="statemant">Target statement</param>
+        /// <returns>Statement without factorials</returns>
+        private static string CalcAllFactorial(string statemant)
+        {
+            int temp = 0;
+            int index = 0;
+            double currentNumber = 0;
+            string answer = statemant;
+
+            while (answer.Contains("!"))
+            {
+                if (char.IsDigit(answer[index]))
+                {
+                    currentNumber = GetDouble(answer, ref index);
+                }
+
+                if (answer[index] == '!')
+                {
+                    answer = answer.Remove(index, 1);
+
+                    answer = answer.Replace(
+                        currentNumber.ToString(),
+                        Facttorial(currentNumber, ref temp).ToString());
+                    index--;
+                }
+                else
+                {
+                    index++;
+                }
+            }
+
+            return answer;
+        }
+
+        /// <summary>
         /// Calculate factorial
         /// </summary>
         /// <param name="x">Last x</param>
@@ -180,15 +229,14 @@ namespace Calculator
                 i++;
             }
 
-            index++;
             return result;
         }
 
         /// <summary>
-        /// Method take number from statement(char array)
+        /// Method take number from someStatement(char array)
         /// </summary>
-        /// <param name="statement">statement(char array form)</param>
-        /// <param name="index">current statement position</param>
+        /// <param name="statement">someStatement(char array form)</param>
+        /// <param name="index">current someStatement position</param>
         /// <returns>some number</returns>
         private static double GetDouble(string statement, ref int index)
         {
@@ -247,7 +295,7 @@ namespace Calculator
                     int tempStart = openBracket + 1;
                     int tempEnd = closeBracket;
 
-                    // Replece performed braket block's statement in result statement
+                    // Replece performed braket block's someStatement in result someStatement
                     string smallExpression = result.Substring(tempStart, tempEnd - tempStart);
                     string smallAnswer = PerformStatement(smallExpression).ToString();
 
