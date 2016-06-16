@@ -102,6 +102,7 @@ namespace Calculator
         {
             double result = Parser.Run(statement);
 
+
             // Perform any situation
             switch (Parser.OperationError)
             {
